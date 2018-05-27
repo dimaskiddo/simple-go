@@ -13,9 +13,9 @@ import (
 
 type Data struct {
   // VaribleName, DataType, CustomName
-  ID       				int				`json:"id"`
-  Username 				string		`json:"username"`
-  Email    				string		`json:"email"`
+  ID              int       `json:"id"`
+  Username        string    `json:"username"`
+  Email           string    `json:"email"`
 }
 
 func main() {
