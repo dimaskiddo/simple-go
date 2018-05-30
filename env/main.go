@@ -7,25 +7,25 @@
 package main
 
 import (
-  "fmt"
-  "os"
+	"fmt"
+	"os"
 )
 
 func main() {
-  // Read Environment Variable
-  config := os.Getenv("CONFIG")
+	// Read Environment Variable
+	config := os.Getenv("CONFIG")
 
-  // If Environment Variable is Empty Then
-  //    Set The Environment Variable with Your Default Value and
-  //    Re-Read The Environment Variable
-  if len(config) == 0 {
-    // Set Environment Variable
-    os.Setenv("CONFIG", "This is my configuration")
+	// If Environment Variable is Empty Then
+	//    Set The Environment Variable with Your Default Value and
+	//    Re-Read The Environment Variable
+	if len(config) == 0 {
+		// Set Environment Variable
+		os.Setenv("CONFIG", "This is my configuration")
 
-    // Re-Read Environment Variable
-    config = os.Getenv("CONFIG")
-  }
+		// Re-Read Environment Variable
+		config = os.Getenv("CONFIG")
+	}
 
-  // Print Environment Variable
-  fmt.Println(config)
+	// Print Environment Variable
+	fmt.Println(config)
 }
