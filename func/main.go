@@ -1,68 +1,77 @@
+// -----------------------------
+// This is a sample code in Go:
+// - Declare Procedure
+// - Declare Function
+// - Function Call By Value
+// - Function Call By Reference
+// -----------------------------
+
 package main
 
 import (
 	"fmt"
 )
 
-func callByValue(param string) string {
-	return param + " By Value"
+// Declare Function With Call By Value
+// So It's Need To Return Some Data Type
+func funcByValue(param string) string {
+	return param + " This Value Has Been Changed By The funcByValue Function"
 }
 
-func callByRefTrue(param *string) {
-	*param += " By Ref"
+// Declare Function With Call By Reference
+// So It's Need To Get Some Variable Memory Address
+// And Return It To The Memory
+func funcByReference(param *string) {
+	*param = *param + " This Value Has Been Changed By The funcByReference Function"
 }
 
-func callByRefFalse(param string) {
-	param += " By Ref"
-
-	fmt.Println("Nilai byRefFalse Dari Dalam Fungsi callByRefFalse: ")
-	fmt.Println(param)
+// Declare Procedure
+func procHello(param string) {
+	param = param + " This Value Has Been Changed By The procHello Procedure"
 
 	fmt.Println("")
+	fmt.Println("Value of Variable Printed From procHello Procedure: ")
+	fmt.Println(param)
 }
 
 func main() {
-	var byValue, byRefTrue, byRefFalse string = "Hello", "Hello", "Hello"
+	var a, b, c string = "Hello", "Hello", "Hello"
 
 	// ---------------------------------------------------------------
-	fmt.Println("Nilai byValue Sebelum Memasuki Fungsi callByValue: ")
-	fmt.Println(byValue)
+	fmt.Println("Value of Variable 'a' Before Go To The funcByValue Function: ")
+	fmt.Println(a)
 
+	// By Value Function Need a Variable To Return a Value
+	// So We Need a Variable To Get It
+	a = funcByValue(a)
 	fmt.Println("")
 
-	byValue = callByValue(byValue)
-
-	fmt.Println("Nilai byValue Sesudah Memasuki Fungsi callByValue: ")
-	fmt.Println(byValue)
-
-	fmt.Println("")
+	fmt.Println("Value of Variable 'a' After Go To The funcByValue Function: ")
+	fmt.Println(a)
 	// ---------------------------------------------------------------
-
+	fmt.Println("---------------------------------------------------")
 	// ---------------------------------------------------------------
-	fmt.Println("Nilai byRefTrue Sebelum Memasuki Fungsi callByRefTrue: ")
-	fmt.Println(byRefTrue)
+	fmt.Println("Value of Variable 'b' Before Go To The funcByReference Function: ")
+	fmt.Println(b)
 
+	// By Reference Function Need To Get a Variable Memory to Return a Value
+	// So We Need a Variable Memory To Get It
+	funcByReference(&b)
 	fmt.Println("")
 
-	callByRefTrue(&byRefTrue)
-
-	fmt.Println("Nilai byRefTrue Sesudah Memasuki Fungsi callByRefTrue: ")
-	fmt.Println(byRefTrue)
-
-	fmt.Println("")
+	fmt.Println("Value of Variable 'b' After Go To The funcByReference Function: ")
+	fmt.Println(b)
 	// ---------------------------------------------------------------
-
+	fmt.Println("---------------------------------------------------")
 	// ---------------------------------------------------------------
-	fmt.Println("Nilai byRefFalse Sebelum Memasuki Fungsi callByRefFalse: ")
-	fmt.Println(byRefFalse)
+	fmt.Println("Value of Variable 'c' Before Go To The procHello Procedure: ")
+	fmt.Println(c)
 
+	// Call Procedure
+	procHello(c)
 	fmt.Println("")
 
-	callByRefFalse(byRefFalse)
-
-	fmt.Println("Nilai byRefFalse Sesudah Memasuki Fungsi callByRefFalse: ")
-	fmt.Println(byRefFalse)
-
-	fmt.Println("")
+	fmt.Println("Value of Variable 'c' After Go To The procHello Procedure: ")
+	fmt.Println(c)
 	// ---------------------------------------------------------------
 }
