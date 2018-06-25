@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -10,7 +11,7 @@ import (
 
 // Function to Get All User Data
 func returnUserAll(w http.ResponseWriter, r *http.Request) {
-	var response ResGetAllUser
+	var response ResGetUser
 
 	// Set Response Data
 	response.Status = http.StatusOK
@@ -19,6 +20,37 @@ func returnUserAll(w http.ResponseWriter, r *http.Request) {
 
 	// Set Response Data to HTTP
 	resWrite(w, response.Status, response)
+}
+
+// Function to Get One User By ID
+func returnUserOne(w http.ResponseWriter, r *http.Request) {
+	// Get Parameters From URI
+	params := mux.Vars(r)
+
+	// Handle Error If Parameters ID is Empty
+	if len(params["id"]) == 0 {
+		resBadRequest(w)
+	} else {
+		// Get ID Parameters From URI Then Convert it to Integer
+		userID, err := strconv.Atoi(params["id"])
+		if err == nil {
+			var user []User
+			var response ResGetUser
+
+			// Convert Users Array to Single Data User Array
+			user = append(user, users[userID-1])
+
+			// Set Response Data
+			response.Status = http.StatusOK
+			response.Message = "Success"
+			response.Data = user
+
+			// Set Response Data to HTTP
+			resWrite(w, response.Status, response)
+		} else {
+			resInternalError(w)
+		}
+	}
 }
 
 // Function to Add User Data
@@ -42,33 +74,9 @@ func returnUserAdd(w http.ResponseWriter, r *http.Request) {
 
 	// Set Response Data to HTTP
 	resWrite(w, response.Status, response)
-}
 
-// Function to Get One User By ID
-func returnUserOne(w http.ResponseWriter, r *http.Request) {
-	// Get Parameters From URI
-	params := mux.Vars(r)
-
-	// Handle Error If Parameters ID is Empty
-	if len(params["id"]) == 0 {
-		resBadRequest(w)
-	} else {
-		// Get ID Parameters From URI Then Convert it to Integer
-		userID, err := strconv.Atoi(params["id"])
-		if err == nil {
-			var response ResGetOneUser
-
-			// Set Response Data
-			response.Status = http.StatusOK
-			response.Message = "Success"
-			response.Data = users[userID-1]
-
-			// Set Response Data to HTTP
-			resWrite(w, response.Status, response)
-		} else {
-			resInternalError(w)
-		}
-	}
+	// Write Log
+	fmt.Println("User Created ID:", user.ID)
 }
 
 // Function to Update User Data By ID
@@ -100,6 +108,9 @@ func returnUserUpdate(w http.ResponseWriter, r *http.Request) {
 
 			// Set Response Data to HTTP
 			resWrite(w, response.Status, response)
+
+			// Write Log
+			fmt.Println("User Updated ID:", userID)
 		} else {
 			resInternalError(w)
 		}
@@ -129,6 +140,9 @@ func returnUserDelete(w http.ResponseWriter, r *http.Request) {
 
 			// Set Response Data to HTTP
 			resWrite(w, response.Status, response)
+
+			// Write Log
+			fmt.Println("User Deleted ID:", userID)
 		} else {
 			resInternalError(w)
 		}

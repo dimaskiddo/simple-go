@@ -8,6 +8,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var servPort string = ":3000"
+
 func main() {
 	// Initialize Router
 	router := mux.NewRouter()
@@ -20,6 +22,6 @@ func main() {
 	router.HandleFunc("/users/{id}", returnUserDelete).Methods("DELETE")
 
 	// Set Server Listener
-	fmt.Println("Application Running and Serving at Port :3000")
-	log.Fatal(http.ListenAndServe(":3000", router))
+	fmt.Println("Application Running and Serving at Port", servPort)
+	log.Fatal(http.ListenAndServe(servPort, router))
 }
