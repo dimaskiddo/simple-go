@@ -8,23 +8,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type ResponseGetAll struct {
-	Status  int    `json:"status"`
-	Message string `json:"message"`
-	Data    []Users
-}
-
-type ResponseGet struct {
-	Status  int    `json:"status"`
-	Message string `json:"message"`
-	Data    Users
-}
-
-type ResponseGlobal struct {
-	Status  int    `json:"status"`
-	Message string `json:"message"`
-}
-
 func main() {
 	// Initialize Router
 	router := mux.NewRouter()
@@ -37,6 +20,6 @@ func main() {
 	router.HandleFunc("/users/{id}", returnUserDelete).Methods("DELETE")
 
 	// Set Server Listener
-	fmt.Println("Serve and Listen at Port :3000")
+	fmt.Println("Application Running and Serving at Port :3000")
 	log.Fatal(http.ListenAndServe(":3000", router))
 }
