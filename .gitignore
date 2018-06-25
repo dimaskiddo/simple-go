@@ -1,4 +1,4 @@
 api-simple/pkg/*
 api-simple/src/*
 
-!*/.gitkeep
+!*.gitkeep
