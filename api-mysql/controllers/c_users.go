@@ -1,26 +1,26 @@
-package main
+package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 
+	"github.com/dimaskiddo/simple-go/api-mysql/configs"
+	"github.com/dimaskiddo/simple-go/api-mysql/models"
+	"github.com/dimaskiddo/simple-go/api-mysql/routers"
+
 	"github.com/gorilla/mux"
 )
 
-// Function to Get All User Data
-func returnUserAll(w http.ResponseWriter, r *http.Request) {
-	var user User
-	var users []User
-	var response ResGetUser
-
-	// Connection Handle to Database
-	db := connectMySQL()
-	defer db.Close()
+// Function to Get User
+func GetUser(w http.ResponseWriter, r *http.Request) {
+	var user models.User
+	var users []models.User
+	var response routers.ResponseGetUser
 
 	// Database Query
+	db := configs.DBConnect()
 	rows, err := db.Query("SELECT * FROM users")
 	if err != nil {
 		log.Print(err)
@@ -38,35 +38,33 @@ func returnUserAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set Response Data
-	response.Status = http.StatusOK
+	response.Status = true
+	response.Code = http.StatusOK
 	response.Message = "Success"
 	response.Data = users
 
-	// Set Response Data to HTTP
-	resWrite(w, response.Status, response)
+	// Write Response Data to HTTP
+	routers.ResponseWrite(w, response.Code, response)
 }
 
-// Function to Get One User By ID
-func returnUserOne(w http.ResponseWriter, r *http.Request) {
+// Function to Get User By ID
+func GetUserById(w http.ResponseWriter, r *http.Request) {
 	// Get Parameters From URI
 	params := mux.Vars(r)
 
 	// Handle Error If Parameters ID is Empty
 	if len(params["id"]) == 0 {
-		resBadRequest(w)
+		routers.ResponseBadRequest(w)
 	} else {
 		// Get ID Parameters From URI Then Convert it to Integer
 		userID, err := strconv.Atoi(params["id"])
 		if err == nil {
-			var user User
-			var users []User
-			var response ResGetUser
-
-			// Connection Handle to Database
-			db := connectMySQL()
-			defer db.Close()
+			var user models.User
+			var users []models.User
+			var response routers.ResponseGetUser
 
 			// Database Query
+			db := configs.DBConnect()
 			rows, err := db.Query("SELECT * FROM users WHERE id=? LIMIT 1", userID)
 			if err != nil {
 				log.Print(err)
@@ -84,127 +82,113 @@ func returnUserOne(w http.ResponseWriter, r *http.Request) {
 			}
 
 			// Set Response Data
-			response.Status = http.StatusOK
+			response.Status = true
+			response.Code = http.StatusOK
 			response.Message = "Success"
 			response.Data = users
 
-			// Set Response Data to HTTP
-			resWrite(w, response.Status, response)
+			// Write Response Data to HTTP
+			routers.ResponseWrite(w, response.Code, response)
 		} else {
-			resInternalError(w)
+			routers.ResponseInternalError(w)
 		}
 	}
 }
 
-// Function to Add User Data
-func returnUserAdd(w http.ResponseWriter, r *http.Request) {
-	var user User
-	var response ResGlobal
+// Function to Add User
+func AddUser(w http.ResponseWriter, r *http.Request) {
+	var user models.User
+	var response routers.Response
 
 	// Decode JSON from Request Body to User Data
 	// Use _ As Temporary Variable
 	_ = json.NewDecoder(r.Body).Decode(&user)
 
-	// Connection Handle to Database
-	db := connectMySQL()
-	defer db.Close()
-
 	// Database Query
+	db := configs.DBConnect()
 	_, err := db.Exec("INSERT INTO users (name, email) VALUE (?, ?)", user.Name, user.Email)
 	if err != nil {
 		log.Print(err)
 	}
 
 	// Set Response Data
-	response.Status = http.StatusCreated
-	response.Message = "Success, User Created"
+	response.Status = true
+	response.Code = http.StatusCreated
+	response.Message = "Success"
 
-	// Set Response Data to HTTP
-	resWrite(w, response.Status, response)
-
-	// Write Log
-	fmt.Println("User Created ID:", user.ID)
+	// Write Response Data to HTTP
+	routers.ResponseWrite(w, response.Code, response)
 }
 
-// Function to Update User Data By ID
-func returnUserUpdate(w http.ResponseWriter, r *http.Request) {
+// Function to Update User By ID
+func PutUserById(w http.ResponseWriter, r *http.Request) {
 	// Get Parameters From URI
 	params := mux.Vars(r)
 
 	// Handle Error If Parameters ID is Empty
 	if len(params["id"]) == 0 {
-		resBadRequest(w)
+		routers.ResponseBadRequest(w)
 	} else {
 		// Get ID Parameters From URI Then Convert it to Integer
 		userID, err := strconv.Atoi(params["id"])
 		if err == nil {
-			var user User
-			var response ResGlobal
+			var user models.User
+			var response routers.Response
 
 			// Decode JSON from Request Body to User Data
 			// Use _ As Temporary Variable
 			_ = json.NewDecoder(r.Body).Decode(&user)
 
-			// Connection Handle to Database
-			db := connectMySQL()
-			defer db.Close()
-
 			// Database Query
+			db := configs.DBConnect()
 			_, err := db.Exec("UPDATE users SET name=?, email=? WHERE id=? LIMIT 1", user.Name, user.Email, userID)
 			if err != nil {
 				log.Print(err)
 			}
 
 			// Set Response Data
-			response.Status = http.StatusCreated
-			response.Message = "Success, User Updated"
+			response.Status = true
+			response.Code = http.StatusCreated
+			response.Message = "Success"
 
-			// Set Response Data to HTTP
-			resWrite(w, response.Status, response)
-
-			// Write Log
-			fmt.Println("User Updated ID:", userID)
+			// Write Response Data to HTTP
+			routers.ResponseWrite(w, response.Code, response)
 		} else {
-			resInternalError(w)
+			routers.ResponseInternalError(w)
 		}
 	}
 }
 
-// Function to Update User Data By ID
-func returnUserDelete(w http.ResponseWriter, r *http.Request) {
+// Function to Delete User By ID
+func DelUserById(w http.ResponseWriter, r *http.Request) {
 	// Get Parameters From URI
 	params := mux.Vars(r)
 
 	// Handle Error If Parameters ID is Empty
 	if len(params["id"]) == 0 {
-		resBadRequest(w)
+		routers.ResponseBadRequest(w)
 	} else {
 		// Get ID Parameters From URI Then Convert it to Integer
 		userID, err := strconv.Atoi(params["id"])
 		if err == nil {
-			var response ResGlobal
-
-			// Connection Handle to Database
-			db := connectMySQL()
-			defer db.Close()
+			var response routers.Response
 
 			// Database Query
+			db := configs.DBConnect()
 			_, err := db.Query("DELETE FROM users WHERE id=? LIMIT 1", userID)
 			if err != nil {
 				log.Print(err)
 			}
 
 			// Set Response Data
-			response.Status = http.StatusOK
-			response.Message = "Success, User Deleted"
+			response.Status = true
+			response.Code = http.StatusOK
+			response.Message = "Success"
 
-			// Set Response Data to HTTP
-			resWrite(w, response.Status, response)
-
-			// Write Log
-			fmt.Println("User Deleted ID:", userID)
+			// Write Response Data to HTTP
+			routers.ResponseWrite(w, response.Code, response)
 		} else {
-			resInternalError(w)
+			routers.ResponseInternalError(w)
 		}
 	}
 }

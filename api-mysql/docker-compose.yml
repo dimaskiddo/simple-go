@@ -18,7 +18,7 @@ services:
       - MYSQL_USER=user
       - MYSQL_PASSWORD=password
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=db_learn
+      - MYSQL_DATABASE=dbs
     volumes:
       - mysql:/var/lib/mysql/data
     restart: always
