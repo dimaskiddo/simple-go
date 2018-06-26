@@ -19,8 +19,11 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	var users []models.User
 	var response routers.ResponseGetUser
 
-	// Database Query
+	// Connect to Database
 	db := configs.DBConnect()
+	defer db.Close()
+
+	// Database Query
 	rows, err := db.Query("SELECT * FROM users")
 	if err != nil {
 		log.Print(err)
@@ -63,8 +66,11 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 			var users []models.User
 			var response routers.ResponseGetUser
 
-			// Database Query
+			// Connect to Database
 			db := configs.DBConnect()
+			defer db.Close()
+
+			// Database Query
 			rows, err := db.Query("SELECT * FROM users WHERE id=? LIMIT 1", userID)
 			if err != nil {
 				log.Print(err)
@@ -104,8 +110,11 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	// Use _ As Temporary Variable
 	_ = json.NewDecoder(r.Body).Decode(&user)
 
-	// Database Query
+	// Connect to Database
 	db := configs.DBConnect()
+	defer db.Close()
+
+	// Database Query
 	_, err := db.Exec("INSERT INTO users (name, email) VALUE (?, ?)", user.Name, user.Email)
 	if err != nil {
 		log.Print(err)
@@ -139,8 +148,11 @@ func PutUserById(w http.ResponseWriter, r *http.Request) {
 			// Use _ As Temporary Variable
 			_ = json.NewDecoder(r.Body).Decode(&user)
 
-			// Database Query
+			// Connect to Database
 			db := configs.DBConnect()
+			defer db.Close()
+
+			// Database Query
 			_, err := db.Exec("UPDATE users SET name=?, email=? WHERE id=? LIMIT 1", user.Name, user.Email, userID)
 			if err != nil {
 				log.Print(err)
@@ -173,8 +185,11 @@ func DelUserById(w http.ResponseWriter, r *http.Request) {
 		if err == nil {
 			var response routers.Response
 
-			// Database Query
+			// Connect to Database
 			db := configs.DBConnect()
+			defer db.Close()
+
+			// Database Query
 			_, err := db.Query("DELETE FROM users WHERE id=? LIMIT 1", userID)
 			if err != nil {
 				log.Print(err)
