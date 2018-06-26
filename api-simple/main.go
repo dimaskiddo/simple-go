@@ -5,27 +5,32 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/dimaskiddo/simple-go/api-simple/configs"
+	"github.com/dimaskiddo/simple-go/api-simple/controllers"
+
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
 
-var servPort string = ":3000"
-
 func main() {
+	// Initialize Configuration
+	configs.Initialize()
+
 	// Initialize Router
 	router := mux.NewRouter()
 
 	// Set Router to Handle Endpoint
-	router.HandleFunc("/users", returnUserAll).Methods("GET")
-	router.HandleFunc("/users", returnUserAdd).Methods("POST")
-	router.HandleFunc("/users/{id}", returnUserOne).Methods("GET")
-	router.HandleFunc("/users/{id}", returnUserUpdate).Methods("PUT", "PATCH")
-	router.HandleFunc("/users/{id}", returnUserDelete).Methods("DELETE")
+	router.HandleFunc("/", controllers.GetIndex).Methods("GET")
+	router.HandleFunc("/users", controllers.GetUser).Methods("GET")
+	router.HandleFunc("/users", controllers.AddUser).Methods("POST")
+	router.HandleFunc("/users/{id}", controllers.GetUserById).Methods("GET")
+	router.HandleFunc("/users/{id}", controllers.PutUserById).Methods("PUT", "PATCH")
+	router.HandleFunc("/users/{id}", controllers.DelUserById).Methods("DELETE")
 
 	// Add Handler For CORS
 	handler := cors.Default().Handler(router)
 
 	// Set Server Listener
-	fmt.Println("Application Running and Serving at Port", servPort)
-	log.Fatal(http.ListenAndServe(servPort, handler))
+	fmt.Println("Application Serving at Port", configs.SvcPort)
+	log.Fatal(http.ListenAndServe(configs.SvcPort, handler))
 }
