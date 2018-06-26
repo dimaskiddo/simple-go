@@ -20,7 +20,7 @@ services:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=db_learn
     volumes:
-      - mysql:/var/www/data
+      - mysql:/var/lib/mysql/data
     restart: always
 
   adminer:
