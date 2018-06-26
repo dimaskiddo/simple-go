@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"log"
 
+	// Set Alias for MySQL Driver Package
+	// To _ Since This Package Only Used in
+	// For MySQL Driver
 	_ "github.com/go-sql-driver/mysql"
 )
 

@@ -1,4 +1,2 @@
-*/pkg/*
-*/src/*
-
+!*src/github.com/dimaskiddo/*
 !*.gitkeep

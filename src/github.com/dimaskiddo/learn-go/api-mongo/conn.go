@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 
-	_ "gopkg.in/mgo.v2"
+	mgo "gopkg.in/mgo.v2"
 )
 
 func connectMongo() {
-	db, err := mgo.Dial("user:password@127.0.0.1:27017/db_learn")
+	db, err := mgo.Dial("user:password@127.0.0.1:27017")
 
 	if err != nil {
 		log.Fatal(err)
