@@ -1,0 +1,32 @@
+version: '2'
+
+volumes:
+  mysql: {}
+
+networks:
+  learngonet:
+    driver: bridge
+
+services:
+  mysql:
+    image: 'dimaskiddo/alpine:mysql-10.2'
+    networks:
+      - learngonet
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=db_learn
+    volumes:
+      - mysql:/var/www/data
+    restart: always
+
+  adminer:
+    image: 'dimaskiddo/alpine:adminer-4.6.2'
+    networks:
+      - learngonet
+    ports:
+      - 8080:8080
+    restart: always

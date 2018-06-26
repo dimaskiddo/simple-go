@@ -1,4 +1,7 @@
 api-simple/pkg/*
 api-simple/src/*
 
+api-mysql/pkg/*
+api-mysql/src/*
+
 !*.gitkeep
