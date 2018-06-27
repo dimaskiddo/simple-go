@@ -82,6 +82,9 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	// Use _ As Temporary Variable
 	_ = json.NewDecoder(r.Body).Decode(&user)
 
+	// Set User ID to New Generated ID
+	user.ID = bson.NewObjectId()
+
 	// Connect to Database
 	db := configs.DBConnect()
 

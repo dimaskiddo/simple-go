@@ -1,7 +1,11 @@
 package models
 
+import (
+	"gopkg.in/mgo.v2/bson"
+)
+
 type User struct {
-	ID    int    `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	ID    bson.ObjectId `bson:"_id" json:"id"`
+	Name  string        `bson:"name" json:"name"`
+	Email string        `bson:"email" json:"email"`
 }
