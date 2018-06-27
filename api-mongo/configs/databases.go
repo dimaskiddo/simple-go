@@ -19,15 +19,14 @@ type databases struct {
 }
 
 // Database Connect Function
-func DBConnect() *mgo.Database {
+func DBConnect() *mgo.Session {
 	db, err := mgo.Dial(DBConfig.User + ":" + DBConfig.Password + "@" + DBConfig.Host + ":" + DBConfig.Port + "/" + DBConfig.Name)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
 
-	// Set MongoDB Session Behavior
+	// Set MongoDB Parameters
 	db.SetMode(mgo.Monotonic, true)
 
-	return db.DB(DBConfig.Name)
+	return db
 }
