@@ -3,7 +3,7 @@
 Package Used in This Project:
 
 - github.com/gorilla/mux
-- github.com/rs/cors
+- github.com/gorilla/handlers
 - github.com/go-sql-driver/mysql
 - gopkg.in/mgo.v2
 

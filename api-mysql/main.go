@@ -4,22 +4,28 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/dimaskiddo/simple-go/api-mysql/configs"
 	"github.com/dimaskiddo/simple-go/api-mysql/controllers"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/rs/cors"
 )
 
 func main() {
 	// Initialize Configuration
 	configs.Initialize()
 
+	// Initialize CORS Configurataion
+	corsAllowedHeaders := handlers.AllowedHeaders(configs.CORSAllowedHeaders)
+	corsAllowedOrigins := handlers.AllowedHeaders(configs.CORSAllowedOrigins)
+	corsAllowedMethods := handlers.AllowedHeaders(configs.CORSAllowedMethods)
+
 	// Initialize Router
 	router := mux.NewRouter()
 
-	// Set Router to Handle Endpoint
+	// Initialize Router Endpoint
 	router.HandleFunc("/", controllers.GetIndex).Methods("GET")
 	router.HandleFunc("/users", controllers.GetUser).Methods("GET")
 	router.HandleFunc("/users", controllers.AddUser).Methods("POST")
@@ -27,10 +33,10 @@ func main() {
 	router.HandleFunc("/users/{id}", controllers.PutUserById).Methods("PUT", "PATCH")
 	router.HandleFunc("/users/{id}", controllers.DelUserById).Methods("DELETE")
 
-	// Add Handler For CORS
-	handler := cors.Default().Handler(router)
+	// Set Router Handler with Logging & CORS Support
+	routerHandler := handlers.LoggingHandler(os.Stdout, handlers.CORS(corsAllowedHeaders, corsAllowedOrigins, corsAllowedMethods)(router))
 
-	// Set Server Listener
+	// Start The HTTP Web Server
 	fmt.Println("Application Serving at Port", configs.SvcPort)
-	log.Fatal(http.ListenAndServe(configs.SvcPort, handler))
+	log.Fatal(http.ListenAndServe(configs.SvcPort, routerHandler))
 }
