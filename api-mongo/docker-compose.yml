@@ -1,0 +1,32 @@
+version: '2'
+
+volumes:
+  mongodb: {}
+
+networks:
+  learngonet:
+    driver: bridge
+
+services:
+  mongodb:
+    image: 'dimaskiddo/alpine:mongodb-3.6'
+    networks:
+      - learngonet
+    ports:
+      - 27017:27017
+    environment:
+      - MONGODB_USER=user
+      - MONGODB_PASSWORD=password
+      - MONGODB_ADMIN_PASSWORD=password
+      - MONGODB_DATABASE=dbs
+    volumes:
+      - mongodb:/var/lib/mongodb/data
+    restart: always
+
+  adminmongo:
+    image: 'dimaskiddo/alpine:adminmongo-1.0'
+    networks:
+      - learngonet
+    ports:
+      - 8080:1234
+    restart: always
