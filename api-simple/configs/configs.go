@@ -4,20 +4,31 @@ import (
 	"os"
 )
 
+var SvcIP string
 var SvcPort string
 
 var CORSAllowedHeaders []string
 var CORSAllowedOrigins []string
 var CORSAllowedMethods []string
 
+var JWTSigningKey string
+
 // Initialize Configuration Variable
 func Initialize() {
+	// Get Service IP from Environment Variable
+	SvcIP = os.Getenv("SERVICE_IP")
+	if len(SvcIP) == 0 {
+		// If Service IP Environment Variable Not Exist
+		// Then Set Service IP Variable to Default Value
+		SvcIP = "0.0.0.0"
+	}
+
 	// Get Service Port from Environment Variable
-	SvcPort = ":" + os.Getenv("SERVICE_PORT")
-	if len(SvcPort) == 1 {
+	SvcPort = os.Getenv("SERVICE_PORT")
+	if len(SvcPort) == 0 {
 		// If Service Port Environment Variable Not Exist
 		// Then Set Service Port Variable to Default Value
-		SvcPort = ":3000"
+		SvcPort = "3000"
 	}
 
 	// Get CORS Allowed Headers from Environment Variable
@@ -42,5 +53,13 @@ func Initialize() {
 		// If CORS Allowed Methods Environment Variable Not Exist
 		// Then Set CORS Allowed Methods Variable to Default Value
 		CORSAllowedMethods = []string{"HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
+	}
+
+	// Get JWT Signing Key from Environment Variable
+	JWTSigningKey = os.Getenv("JWT_SIGNING_KEY")
+	if len(JWTSigningKey) == 1 {
+		// If JWT Signing Key Environment Variable Not Exist
+		// Then Set JWT Signing Key Variable to Default Value
+		JWTSigningKey = "signingkey"
 	}
 }
