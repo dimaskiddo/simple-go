@@ -12,7 +12,12 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-type ResponseJWT struct {
+type JWTCredentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type JWTResponse struct {
 	Status bool   `json:"status"`
 	Code   int    `json:"code"`
 	Token  string `json:"token"`
