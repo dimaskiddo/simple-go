@@ -41,7 +41,7 @@ func GetAuthenticationJWT(w http.ResponseWriter, r *http.Request) {
 
 			response.Status = true
 			response.Code = http.StatusOK
-			response.Token = "Bearer " + token
+			response.Token = token
 
 			routers.ResponseWrite(w, response.Code, response)
 		}
