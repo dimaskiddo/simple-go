@@ -82,8 +82,8 @@ func AuthJWT(nextHandlerFunc http.HandlerFunc) http.Handler {
 		}
 
 		// Set Extracted Claims to HTTP Header
-		r.Header.Set("data", claims["data"].(string))
-		r.Header.Set("expire", claims["expire"].(string))
+		r.Header.Set("JWT-Data", claims["data"].(string))
+		r.Header.Set("JWT-Expire", claims["expire"].(string))
 
 		// Call Next Handler Function With Current Request
 		nextHandlerFunc(w, r)

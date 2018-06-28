@@ -30,6 +30,9 @@ func main() {
 	router.HandleFunc("/", controllers.GetIndex).Methods("GET")
 	router.HandleFunc("/auth", controllers.GetAuthenticationJWT).Methods("POST")
 
+	// Initialize Router Endpoint Secured With Basic Auth
+	router.Handle("/basic-auth", helpers.AuthBasic(controllers.GetAuthenticationJWT)).Methods("GET", "POST")
+
 	// Initialize Router Endpoint Secured With Authorization
 	router.Handle("/users", helpers.AuthJWT(controllers.GetUser)).Methods("GET")
 	router.Handle("/users", helpers.AuthJWT(controllers.AddUser)).Methods("POST")

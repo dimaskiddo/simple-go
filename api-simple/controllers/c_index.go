@@ -27,7 +27,7 @@ func GetAuthenticationJWT(w http.ResponseWriter, r *http.Request) {
 	// Use _ As Temporary Variable
 	_ = json.NewDecoder(r.Body).Decode(&creds)
 
-	// Make Sure Username and Passwor is Not Empty
+	// Make Sure Username and Password is Not Empty
 	if len(creds.Username) == 0 || len(creds.Password) == 0 {
 		routers.ResponseBadRequest(w)
 		return
