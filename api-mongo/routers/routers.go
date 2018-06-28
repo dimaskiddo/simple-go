@@ -46,3 +46,16 @@ func ResponseInternalError(w http.ResponseWriter) {
 	// Set Response Data to HTTP
 	ResponseWrite(w, response.Code, response)
 }
+
+// Write Unauthorized
+func ResponseUnauthorized(w http.ResponseWriter) {
+	var response Response
+
+	// Set Response Data
+	response.Status = false
+	response.Code = http.StatusUnauthorized
+	response.Message = "Unauthorized"
+
+	// Set Response Data to HTTP
+	ResponseWrite(w, response.Code, response)
+}

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/dimaskiddo/simple-go/api-mysql/configs"
+	"github.com/dimaskiddo/simple-go/api-mysql/helpers"
 	"github.com/dimaskiddo/simple-go/api-mysql/models"
 	"github.com/dimaskiddo/simple-go/api-mysql/routers"
 
@@ -20,7 +20,7 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	var response routers.ResponseGetUser
 
 	// Connect to Database
-	db := configs.DBConnect()
+	db := helpers.MySQLConnect()
 	defer db.Close()
 
 	// Database Query
@@ -67,7 +67,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 			var response routers.ResponseGetUser
 
 			// Connect to Database
-			db := configs.DBConnect()
+			db := helpers.MySQLConnect()
 			defer db.Close()
 
 			// Database Query
@@ -111,7 +111,7 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&user)
 
 	// Connect to Database
-	db := configs.DBConnect()
+	db := helpers.MySQLConnect()
 	defer db.Close()
 
 	// Database Query
@@ -149,7 +149,7 @@ func PutUserById(w http.ResponseWriter, r *http.Request) {
 			_ = json.NewDecoder(r.Body).Decode(&user)
 
 			// Connect to Database
-			db := configs.DBConnect()
+			db := helpers.MySQLConnect()
 			defer db.Close()
 
 			// Database Query
@@ -186,7 +186,7 @@ func DelUserById(w http.ResponseWriter, r *http.Request) {
 			var response routers.Response
 
 			// Connect to Database
-			db := configs.DBConnect()
+			db := helpers.MySQLConnect()
 			defer db.Close()
 
 			// Database Query

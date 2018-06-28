@@ -8,6 +8,7 @@ import (
 
 	"github.com/dimaskiddo/simple-go/api-mysql/configs"
 	"github.com/dimaskiddo/simple-go/api-mysql/controllers"
+	"github.com/dimaskiddo/simple-go/api-mysql/helpers"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -27,16 +28,19 @@ func main() {
 
 	// Initialize Router Endpoint
 	router.HandleFunc("/", controllers.GetIndex).Methods("GET")
-	router.HandleFunc("/users", controllers.GetUser).Methods("GET")
-	router.HandleFunc("/users", controllers.AddUser).Methods("POST")
-	router.HandleFunc("/users/{id}", controllers.GetUserById).Methods("GET")
-	router.HandleFunc("/users/{id}", controllers.PutUserById).Methods("PUT", "PATCH")
-	router.HandleFunc("/users/{id}", controllers.DelUserById).Methods("DELETE")
+	router.HandleFunc("/auth", controllers.GetAuthenticationJWT).Methods("POST")
+
+	// Initialize Router Endpoint Secured With Authorization
+	router.Handle("/users", helpers.AuthJWT(controllers.GetUser)).Methods("GET")
+	router.Handle("/users", helpers.AuthJWT(controllers.AddUser)).Methods("POST")
+	router.Handle("/users/{id}", helpers.AuthJWT(controllers.GetUserById)).Methods("GET")
+	router.Handle("/users/{id}", helpers.AuthJWT(controllers.PutUserById)).Methods("PUT", "PATCH")
+	router.Handle("/users/{id}", helpers.AuthJWT(controllers.DelUserById)).Methods("DELETE")
 
 	// Set Router Handler with Logging & CORS Support
 	routerHandler := handlers.LoggingHandler(os.Stdout, handlers.CORS(corsAllowedHeaders, corsAllowedOrigins, corsAllowedMethods)(router))
 
 	// Start The HTTP Web Server
-	fmt.Println("Application Serving at Port", configs.SvcPort)
-	log.Fatal(http.ListenAndServe(configs.SvcPort, routerHandler))
+	fmt.Println("Application Serving at", configs.SvcIP+":"+configs.SvcPort)
+	log.Fatal(http.ListenAndServe(configs.SvcIP+":"+configs.SvcPort, routerHandler))
 }

@@ -1,4 +1,4 @@
-package configs
+package helpers
 
 import (
 	"log"
@@ -10,7 +10,7 @@ import (
 )
 
 // Database Configuration Struct
-type databases struct {
+type Connection struct {
 	Host     string
 	Port     string
 	User     string
@@ -18,15 +18,18 @@ type databases struct {
 	Name     string
 }
 
+// Database Configuration Variable
+var DBConfig Connection
+
 // Database Connect Function
-func DBConnect() *mgo.Session {
-	db, err := mgo.Dial(DBConfig.User + ":" + DBConfig.Password + "@" + DBConfig.Host + ":" + DBConfig.Port + "/" + DBConfig.Name)
+func MongoDBConnect() (*mgo.Session, *mgo.Database) {
+	sess, err := mgo.Dial(DBConfig.User + ":" + DBConfig.Password + "@" + DBConfig.Host + ":" + DBConfig.Port + "/" + DBConfig.Name)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Set MongoDB Parameters
-	db.SetMode(mgo.Monotonic, true)
+	sess.SetMode(mgo.Monotonic, true)
 
-	return db
+	return sess, sess.DB(DBConfig.Name)
 }

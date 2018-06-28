@@ -2,6 +2,8 @@ package configs
 
 import (
 	"os"
+
+	"github.com/dimaskiddo/simple-go/api-simple/helpers"
 )
 
 var SvcIP string
@@ -10,8 +12,6 @@ var SvcPort string
 var CORSAllowedHeaders []string
 var CORSAllowedOrigins []string
 var CORSAllowedMethods []string
-
-var JWTSigningKey string
 
 // Initialize Configuration Variable
 func Initialize() {
@@ -56,10 +56,10 @@ func Initialize() {
 	}
 
 	// Get JWT Signing Key from Environment Variable
-	JWTSigningKey = os.Getenv("JWT_SIGNING_KEY")
-	if len(JWTSigningKey) == 1 {
+	helpers.JWTSigningKey = os.Getenv("JWT_SIGNING_KEY")
+	if len(helpers.JWTSigningKey) == 1 {
 		// If JWT Signing Key Environment Variable Not Exist
 		// Then Set JWT Signing Key Variable to Default Value
-		JWTSigningKey = "signingkey"
+		helpers.JWTSigningKey = "signingkey"
 	}
 }

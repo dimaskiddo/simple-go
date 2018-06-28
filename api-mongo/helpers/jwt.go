@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dimaskiddo/simple-go/api-simple/routers"
+	"github.com/dimaskiddo/simple-go/api-mongo/routers"
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
