@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/dimaskiddo/simple-go/api-simple/configs"
 	"github.com/dimaskiddo/simple-go/api-simple/controllers"
@@ -16,6 +17,10 @@ import (
 )
 
 func main() {
+	// Initialize Channel for OS Signal
+	signalExit := make(chan int)
+	signalOS := make(chan os.Signal, 1)
+
 	// Initialize Configuration
 	configs.Initialize()
 
@@ -48,8 +53,13 @@ func main() {
 	fmt.Println("Application Serving at", configs.SvcIP+":"+configs.SvcPort)
 	log.Fatal(http.ListenAndServe(configs.SvcIP+":"+configs.SvcPort, routerHandler))
 
-	// Listen to OS Signals
-	signalChannel := make(chan os.Signal)
-	signal.Notify(signalChannel, os.Interrupt, os.Kill)
-	<-signalChannel
+	// Catch OS Signal from Channel
+	signal.Notify(signalOS, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-signalOS
+		fmt.Println("Terminating Application Gracefully")
+	}()
+
+	// Return Exit Code
+	<-signalExit
 }
