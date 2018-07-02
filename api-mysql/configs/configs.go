@@ -64,42 +64,42 @@ func Initialize() {
 	}
 
 	// Get Database Host from Environment Variable
-	helpers.DBConfig.Host = os.Getenv("DB_HOST")
-	if len(helpers.DBConfig.Host) == 0 {
+	helpers.MySQLConfig.Host = os.Getenv("DB_HOST")
+	if len(helpers.MySQLConfig.Host) == 0 {
 		// If Database Host Environment Variable Not Exist
 		// Then Set Database Host Variable to Default Value
-		helpers.DBConfig.Host = "127.0.0.1"
+		helpers.MySQLConfig.Host = "127.0.0.1"
 	}
 
 	// Get Database Port from Environment Variable
-	helpers.DBConfig.Port = os.Getenv("DB_PORT")
-	if len(helpers.DBConfig.Port) == 0 {
+	helpers.MySQLConfig.Port = os.Getenv("DB_PORT")
+	if len(helpers.MySQLConfig.Port) == 0 {
 		// If Database Port Environment Variable Not Exist
 		// Then Set Database Port Variable to Default Value
-		helpers.DBConfig.Port = "3306"
+		helpers.MySQLConfig.Port = "3306"
 	}
 
 	// Get Database User from Environment Variable
-	helpers.DBConfig.User = os.Getenv("DB_USER")
-	if len(helpers.DBConfig.User) == 0 {
+	helpers.MySQLConfig.User = os.Getenv("DB_USER")
+	if len(helpers.MySQLConfig.User) == 0 {
 		// If Database User Environment Variable Not Exist
 		// Then Set Database User Variable to Default Value
-		helpers.DBConfig.User = "user"
+		helpers.MySQLConfig.User = "user"
 	}
 
 	// Get Database Password from Environment Variable
-	helpers.DBConfig.Password = os.Getenv("DB_PASSWORD")
-	if len(helpers.DBConfig.Password) == 0 {
+	helpers.MySQLConfig.Password = os.Getenv("DB_PASSWORD")
+	if len(helpers.MySQLConfig.Password) == 0 {
 		// If Database Password Environment Variable Not Exist
 		// Then Set Database Password Variable to Default Value
-		helpers.DBConfig.Password = "password"
+		helpers.MySQLConfig.Password = "password"
 	}
 
 	// Get Database Name from Environment Variable
-	helpers.DBConfig.Name = os.Getenv("DB_NAME")
-	if len(helpers.DBConfig.Name) == 0 {
+	helpers.MySQLConfig.Name = os.Getenv("DB_NAME")
+	if len(helpers.MySQLConfig.Name) == 0 {
 		// If Database Name Environment Variable Not Exist
 		// Then Set Database Name Variable to Default Value
-		helpers.DBConfig.Name = "dbs"
+		helpers.MySQLConfig.Name = "dbs"
 	}
 }

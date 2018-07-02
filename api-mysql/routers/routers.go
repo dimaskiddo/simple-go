@@ -47,7 +47,7 @@ func ResponseInternalError(w http.ResponseWriter) {
 	ResponseWrite(w, response.Code, response)
 }
 
-// Write Unauthorized
+// Write Response Unauthorized
 func ResponseUnauthorized(w http.ResponseWriter) {
 	var response Response
 
@@ -58,4 +58,21 @@ func ResponseUnauthorized(w http.ResponseWriter) {
 
 	// Set Response Data to HTTP
 	ResponseWrite(w, response.Code, response)
+}
+
+// Write Response Authenticate
+func ResponseAuthenticate(w http.ResponseWriter) {
+	var response Response
+
+	// Set Response Data
+	response.Status = false
+	response.Code = http.StatusUnauthorized
+	response.Message = "Unauthorized"
+
+	// Write Response
+	w.Header().Set("WWW-Authenticate", `Basic realm="Authorization Required"`)
+	w.WriteHeader(response.Code)
+
+	// Write JSON to Response
+	json.NewEncoder(w).Encode(response)
 }

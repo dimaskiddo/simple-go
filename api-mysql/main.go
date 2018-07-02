@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 
 	"github.com/dimaskiddo/simple-go/api-mysql/configs"
 	"github.com/dimaskiddo/simple-go/api-mysql/controllers"
@@ -17,6 +18,10 @@ import (
 func main() {
 	// Initialize Configuration
 	configs.Initialize()
+
+	// Initialize Database
+	helpers.DB = helpers.MySQLConnect()
+	defer helpers.DB.Close()
 
 	// Initialize CORS Configurataion
 	corsAllowedHeaders := handlers.AllowedHeaders(configs.CORSAllowedHeaders)
@@ -46,4 +51,9 @@ func main() {
 	// Start The HTTP Web Server
 	fmt.Println("Application Serving at", configs.SvcIP+":"+configs.SvcPort)
 	log.Fatal(http.ListenAndServe(configs.SvcIP+":"+configs.SvcPort, routerHandler))
+
+	// Listen to OS Signals
+	signalChannel := make(chan os.Signal)
+	signal.Notify(signalChannel, os.Interrupt, os.Kill)
+	<-signalChannel
 }

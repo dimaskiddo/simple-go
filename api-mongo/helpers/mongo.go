@@ -9,8 +9,14 @@ import (
 	mgo "gopkg.in/mgo.v2"
 )
 
+// Database Connection Variable
+var Session *mgo.Session
+
+// Database Connection Variable
+var DB *mgo.Database
+
 // Database Configuration Struct
-type Connection struct {
+type MongoConfiguration struct {
 	Host     string
 	Port     string
 	User     string
@@ -19,17 +25,25 @@ type Connection struct {
 }
 
 // Database Configuration Variable
-var DBConfig Connection
+var MongoConfig MongoConfiguration
 
 // Database Connect Function
-func MongoDBConnect() (*mgo.Session, *mgo.Database) {
-	sess, err := mgo.Dial(DBConfig.User + ":" + DBConfig.Password + "@" + DBConfig.Host + ":" + DBConfig.Port + "/" + DBConfig.Name)
+func MongoConnect() (*mgo.Session, *mgo.Database) {
+	// Get Session Connection
+	sess, err := mgo.Dial(MongoConfig.User + ":" + MongoConfig.Password + "@" + MongoConfig.Host + ":" + MongoConfig.Port + "/" + MongoConfig.Name)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Set MongoDB Parameters
+	// Test Session Connection
+	err = sess.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Set Mongo Session to Monotonic
 	sess.SetMode(mgo.Monotonic, true)
 
-	return sess, sess.DB(DBConfig.Name)
+	// Return Current Session & Database
+	return sess, sess.DB(MongoConfig.Name)
 }

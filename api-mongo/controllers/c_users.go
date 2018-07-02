@@ -18,12 +18,8 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	var users []models.User
 	var response routers.ResponseGetUser
 
-	// Connect to Database
-	sess, db := helpers.MongoDBConnect()
-	defer sess.Close()
-
 	// Database Query
-	err := db.C("users").Find(bson.M{}).All(&users)
+	err := helpers.DB.C("users").Find(bson.M{}).All(&users)
 	if err != nil {
 		log.Print(err)
 	}
@@ -51,12 +47,8 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 		var users []models.User
 		var response routers.ResponseGetUser
 
-		// Connect to Database
-		sess, db := helpers.MongoDBConnect()
-		defer sess.Close()
-
 		// Database Query
-		err := db.C("users").FindId(bson.ObjectIdHex(params["id"])).One(&user)
+		err := helpers.DB.C("users").FindId(bson.ObjectIdHex(params["id"])).One(&user)
 		if err != nil {
 			log.Print(err)
 		}
@@ -87,12 +79,8 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	// Set User ID to New Generated ID
 	user.ID = bson.NewObjectId()
 
-	// Connect to Database
-	sess, db := helpers.MongoDBConnect()
-	defer sess.Close()
-
 	// Database Query
-	err := db.C("users").Insert(&user)
+	err := helpers.DB.C("users").Insert(&user)
 	if err != nil {
 		log.Print(err)
 	}
@@ -122,12 +110,8 @@ func PutUserById(w http.ResponseWriter, r *http.Request) {
 		// Use _ As Temporary Variable
 		_ = json.NewDecoder(r.Body).Decode(&user)
 
-		// Connect to Database
-		sess, db := helpers.MongoDBConnect()
-		defer sess.Close()
-
 		// Database Query
-		err := db.C("users").UpdateId(params["id"], &user)
+		err := helpers.DB.C("users").UpdateId(params["id"], &user)
 		if err != nil {
 			log.Print(err)
 		}
@@ -154,18 +138,14 @@ func DelUserById(w http.ResponseWriter, r *http.Request) {
 		var user models.User
 		var response routers.Response
 
-		// Connect to Database
-		sess, db := helpers.MongoDBConnect()
-		defer sess.Close()
-
 		// Database Query Get User By ID
-		err := db.C("users").FindId(bson.ObjectIdHex(params["id"])).One(&user)
+		err := helpers.DB.C("users").FindId(bson.ObjectIdHex(params["id"])).One(&user)
 		if err != nil {
 			log.Print(err)
 		}
 
 		// Database Query Delete User
-		err = db.C("users").Remove(&user)
+		err = helpers.DB.C("users").Remove(&user)
 		if err != nil {
 			log.Print(err)
 		}

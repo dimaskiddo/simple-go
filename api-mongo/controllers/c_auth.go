@@ -23,7 +23,7 @@ func GetAuthentication(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Some Business Logic Here to Match The Username and Password
-	if creds.Username == "username" && creds.Password == "password" {
+	if creds.Username == "user" && creds.Password == "password" {
 		// Get JWT Token From Pre-Defined Function
 		token, err := helpers.GetJWTToken(creds.Username)
 		if err != nil {

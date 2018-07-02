@@ -19,15 +19,12 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	var users []models.User
 	var response routers.ResponseGetUser
 
-	// Connect to Database
-	db := helpers.MySQLConnect()
-	defer db.Close()
-
 	// Database Query
-	rows, err := db.Query("SELECT * FROM users")
+	rows, err := helpers.DB.Query("SELECT * FROM users")
 	if err != nil {
 		log.Print(err)
 	}
+	defer rows.Close()
 
 	// Populate Data
 	for rows.Next() {
@@ -66,15 +63,12 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 			var users []models.User
 			var response routers.ResponseGetUser
 
-			// Connect to Database
-			db := helpers.MySQLConnect()
-			defer db.Close()
-
 			// Database Query
-			rows, err := db.Query("SELECT * FROM users WHERE id=? LIMIT 1", userID)
+			rows, err := helpers.DB.Query("SELECT * FROM users WHERE id=? LIMIT 1", userID)
 			if err != nil {
 				log.Print(err)
 			}
+			defer rows.Close()
 
 			// Populate Data
 			for rows.Next() {
@@ -110,12 +104,8 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	// Use _ As Temporary Variable
 	_ = json.NewDecoder(r.Body).Decode(&user)
 
-	// Connect to Database
-	db := helpers.MySQLConnect()
-	defer db.Close()
-
 	// Database Query
-	_, err := db.Exec("INSERT INTO users (name, email) VALUE (?, ?)", user.Name, user.Email)
+	_, err := helpers.DB.Exec("INSERT INTO users (name, email) VALUE (?, ?)", user.Name, user.Email)
 	if err != nil {
 		log.Print(err)
 	}
@@ -148,12 +138,8 @@ func PutUserById(w http.ResponseWriter, r *http.Request) {
 			// Use _ As Temporary Variable
 			_ = json.NewDecoder(r.Body).Decode(&user)
 
-			// Connect to Database
-			db := helpers.MySQLConnect()
-			defer db.Close()
-
 			// Database Query
-			_, err := db.Exec("UPDATE users SET name=?, email=? WHERE id=? LIMIT 1", user.Name, user.Email, userID)
+			_, err := helpers.DB.Exec("UPDATE users SET name=?, email=? WHERE id=? LIMIT 1", user.Name, user.Email, userID)
 			if err != nil {
 				log.Print(err)
 			}
@@ -185,12 +171,8 @@ func DelUserById(w http.ResponseWriter, r *http.Request) {
 		if err == nil {
 			var response routers.Response
 
-			// Connect to Database
-			db := helpers.MySQLConnect()
-			defer db.Close()
-
 			// Database Query
-			_, err := db.Query("DELETE FROM users WHERE id=? LIMIT 1", userID)
+			_, err := helpers.DB.Query("DELETE FROM users WHERE id=? LIMIT 1", userID)
 			if err != nil {
 				log.Print(err)
 			}
