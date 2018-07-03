@@ -31,7 +31,6 @@ func main() {
 
 	// Initialize Router Endpoint
 	router.HandleFunc("/", controllers.GetIndex).Methods("GET")
-	router.HandleFunc("/auth", controllers.GetAuthentication).Methods("POST")
 
 	// Initialize Router Endpoint Secured With Basic Auth
 	router.Handle("/basic-auth", helpers.AuthBasic(controllers.GetAuthentication)).Methods("GET", "POST")
