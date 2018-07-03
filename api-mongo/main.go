@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -18,7 +16,6 @@ import (
 
 func main() {
 	// Initialize Channel for OS Signal
-	signalExit := make(chan int)
 	signalOS := make(chan os.Signal, 1)
 
 	// Initialize Configuration
@@ -53,18 +50,19 @@ func main() {
 	// Set Router Handler with Logging & CORS Support
 	routerHandler := handlers.LoggingHandler(os.Stdout, handlers.CORS(corsAllowedHeaders, corsAllowedOrigins, corsAllowedMethods)(router))
 
-	// Start The HTTP Web Server
-	fmt.Println("Application Serving at", configs.SvcIP+":"+configs.SvcPort)
-	log.Fatal(http.ListenAndServe(configs.SvcIP+":"+configs.SvcPort, routerHandler))
+	// Initialize Server With Initialized Router
+	server := helpers.NewServer(routerHandler)
+
+	// Starting Server
+	server.Start()
+	defer server.Stop()
 
 	// Catch OS Signal from Channel
 	signal.Notify(signalOS, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		<-signalOS
-		fmt.Println("Terminating Application Gracefully")
-		helpers.Session.Close()
-	}()
 
-	// Return Exit Code
-	<-signalExit
+	// Return OS Signal as Exit Code
+	<-signalOS
+
+	// Add Some Spaces When Done
+	fmt.Println("")
 }

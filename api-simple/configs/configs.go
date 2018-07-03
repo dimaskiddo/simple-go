@@ -6,9 +6,6 @@ import (
 	"github.com/dimaskiddo/simple-go/api-simple/helpers"
 )
 
-var SvcIP string
-var SvcPort string
-
 var CORSAllowedHeaders []string
 var CORSAllowedOrigins []string
 var CORSAllowedMethods []string
@@ -16,19 +13,19 @@ var CORSAllowedMethods []string
 // Initialize Configuration Variable
 func Initialize() {
 	// Get Service IP from Environment Variable
-	SvcIP = os.Getenv("SERVICE_IP")
-	if len(SvcIP) == 0 {
+	helpers.ServerConfig.IP = os.Getenv("SERVICE_IP")
+	if len(helpers.ServerConfig.IP) == 0 {
 		// If Service IP Environment Variable Not Exist
 		// Then Set Service IP Variable to Default Value
-		SvcIP = "0.0.0.0"
+		helpers.ServerConfig.IP = "0.0.0.0"
 	}
 
 	// Get Service Port from Environment Variable
-	SvcPort = os.Getenv("SERVICE_PORT")
-	if len(SvcPort) == 0 {
+	helpers.ServerConfig.Port = os.Getenv("SERVICE_PORT")
+	if len(helpers.ServerConfig.Port) == 0 {
 		// If Service Port Environment Variable Not Exist
 		// Then Set Service Port Variable to Default Value
-		SvcPort = "3000"
+		helpers.ServerConfig.Port = "3000"
 	}
 
 	// Get CORS Allowed Headers from Environment Variable
