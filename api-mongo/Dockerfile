@@ -1,8 +1,8 @@
 FROM dimaskiddo/alpine:base
 MAINTAINER Dimas Restu Hidayanto <dimas.restu@student.upi.edu>
 
-COPY api-mongo /opt/app/api-mongo
+COPY build/main /opt/app/main
 WORKDIR /opt/app
 
 EXPOSE 3000
-CMD ["/opt/app/api-mongo"]
+CMD ["/opt/app/main"]

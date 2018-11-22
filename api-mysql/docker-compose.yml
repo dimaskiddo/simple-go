@@ -8,6 +8,15 @@ networks:
     driver: bridge
 
 services:
+  api-mysql:
+    build: .
+    image: 'dimaskiddo/api-mysql:latest'
+    networks:
+      - learngonet
+    ports:
+      - 3000:3000
+    restart: always
+
   mysql:
     image: 'dimaskiddo/alpine:mysql-10.2'
     networks:

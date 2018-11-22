@@ -8,6 +8,15 @@ networks:
     driver: bridge
 
 services:
+  api-mongo:
+    build: .
+    image: 'dimaskiddo/api-mongo:latest'
+    networks:
+      - learngonet
+    ports:
+      - 3000:3000
+    restart: always
+
   mongodb:
     image: 'dimaskiddo/alpine:mongodb-3.6'
     networks:
