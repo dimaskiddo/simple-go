@@ -11,16 +11,16 @@ docker-build:
 	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION) .
 
 docker-run:
-	docker run -d -p $(GO_EXPOSE_PORT):$(GO_EXPOSE_PORT) --name $(GO_OUTPUT) --rm $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION)
+	docker-compose up -d
 
 docker-stop:
-	docker stop $(GO_OUTPUT)
+	docker-compose down
 
 docker-logs:
-	docker logs $(GO_OUTPUT)
+	docker-compose logs $(GO_OUTPUT)
 
 clean-build:
-	rm -f $(GO_OUTPUT)
+	rm -f ./build/$(GO_OUTPUT)
 
 clean-docker:
 	docker rmi -f $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION)

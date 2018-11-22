@@ -20,7 +20,7 @@ docker-logs:
 	docker logs $(GO_OUTPUT)
 
 clean-build:
-	rm -f $(GO_OUTPUT)
+	rm -f ./build/$(GO_OUTPUT)
 
 clean-docker:
 	docker rmi -f $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION)

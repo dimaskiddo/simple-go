@@ -8,7 +8,7 @@ networks:
     driver: bridge
 
 services:
-  api-mongo:
+  main:
     build: .
     image: 'dimaskiddo/api-mongo:latest'
     networks:

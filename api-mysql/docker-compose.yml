@@ -8,7 +8,7 @@ networks:
     driver: bridge
 
 services:
-  api-mysql:
+  main:
     build: .
     image: 'dimaskiddo/api-mysql:latest'
     networks:
