@@ -4,6 +4,7 @@ DOCKER_IMAGE_NAME ?= dimaskiddo/api-mongo
 DOCKER_IMAGE_VERSION ?= latest
 
 build:
+	dep ensure
 	CGO_ENABLED=0 GOOS=linux go build -a -o $(GO_OUTPUT) main.go
 
 docker-build:
