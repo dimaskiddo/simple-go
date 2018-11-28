@@ -6,7 +6,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/dimaskiddo/simple-go/api-mysql/configs"
 	"github.com/dimaskiddo/simple-go/api-mysql/controllers"
 	"github.com/dimaskiddo/simple-go/api-mysql/helpers"
 
@@ -19,16 +18,16 @@ func main() {
 	signalOS := make(chan os.Signal, 1)
 
 	// Initialize Configuration
-	configs.Initialize()
+	helpers.ConfigInitialize()
+
+	// Initialize CORS Configurataion
+	corsHeaders := handlers.AllowedHeaders(helpers.RouterCORS.Headers)
+	corsOrigins := handlers.AllowedOrigins(helpers.RouterCORS.Origins)
+	corsMethods := handlers.AllowedMethods(helpers.RouterCORS.Methods)
 
 	// Initialize Database
 	helpers.DB = helpers.MySQLConnect()
 	defer helpers.DB.Close()
-
-	// Initialize CORS Configurataion
-	corsAllowedHeaders := handlers.AllowedHeaders(configs.CORSAllowedHeaders)
-	corsAllowedOrigins := handlers.AllowedHeaders(configs.CORSAllowedOrigins)
-	corsAllowedMethods := handlers.AllowedHeaders(configs.CORSAllowedMethods)
 
 	// Initialize Router
 	router := mux.NewRouter()
@@ -47,7 +46,7 @@ func main() {
 	router.Handle("/users/{id}", helpers.AuthJWT(controllers.DelUserById)).Methods("DELETE")
 
 	// Set Router Handler with Logging & CORS Support
-	routerHandler := handlers.LoggingHandler(os.Stdout, handlers.CORS(corsAllowedHeaders, corsAllowedOrigins, corsAllowedMethods)(router))
+	routerHandler := handlers.LoggingHandler(os.Stdout, handlers.CORS(corsHeaders, corsOrigins, corsMethods)(router))
 
 	// Initialize Server With Initialized Router
 	server := helpers.NewServer(routerHandler)
