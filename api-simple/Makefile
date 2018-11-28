@@ -19,8 +19,11 @@ docker-stop:
 docker-logs:
 	docker logs $(GO_OUTPUT)
 
-clean-build:
+clean-go:
 	rm -f ./build/$(GO_OUTPUT)
+
+clean-vendor:
+	rm -rf ./vendor/*/
 
 clean-docker:
 	docker rmi -f $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION)

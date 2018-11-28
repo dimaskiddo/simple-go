@@ -6,7 +6,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/dimaskiddo/simple-go/api-simple/configs"
 	"github.com/dimaskiddo/simple-go/api-simple/controllers"
 	"github.com/dimaskiddo/simple-go/api-simple/helpers"
 
@@ -19,12 +18,12 @@ func main() {
 	signalOS := make(chan os.Signal, 1)
 
 	// Initialize Configuration
-	configs.Initialize()
+	helpers.ConfigInitialize()
 
 	// Initialize CORS Configurataion
-	corsAllowedHeaders := handlers.AllowedHeaders(configs.CORSAllowedHeaders)
-	corsAllowedOrigins := handlers.AllowedHeaders(configs.CORSAllowedOrigins)
-	corsAllowedMethods := handlers.AllowedHeaders(configs.CORSAllowedMethods)
+	corsHeaders := handlers.AllowedHeaders(helpers.RouterCORS.Headers)
+	corsOrigins := handlers.AllowedOrigins(helpers.RouterCORS.Origins)
+	corsMethods := handlers.AllowedMethods(helpers.RouterCORS.Methods)
 
 	// Initialize Router
 	router := mux.NewRouter()
@@ -43,7 +42,7 @@ func main() {
 	router.Handle("/users/{id}", helpers.AuthJWT(controllers.DelUserById)).Methods("DELETE")
 
 	// Set Router Handler with Logging & CORS Support
-	routerHandler := handlers.LoggingHandler(os.Stdout, handlers.CORS(corsAllowedHeaders, corsAllowedOrigins, corsAllowedMethods)(router))
+	routerHandler := handlers.LoggingHandler(os.Stdout, handlers.CORS(corsHeaders, corsOrigins, corsMethods)(router))
 
 	// Initialize Server With Initialized Router
 	server := helpers.NewServer(routerHandler)
