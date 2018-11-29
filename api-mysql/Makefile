@@ -29,4 +29,6 @@ clean-docker:
 	docker rmi -f $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION)
 
 clean-all:
-	docker rmi -f $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION) && rm -f ./build/$(GO_OUTPUT)
+	rm -f ./build/$(GO_OUTPUT)
+	rm -rf ./vendor/*/*
+	docker rmi -f $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION)

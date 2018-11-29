@@ -15,6 +15,11 @@ services:
       - learngonet
     ports:
       - 3000:3000
+    environment:
+      - CONFIG_DB_HOST=mongodb
+      - CONFIG_DB_USER=user
+      - CONFIG_DB_PASSWORD=password
+      - CONFIG_DB_DATABASE=dbs
     restart: always
 
   mongodb:
